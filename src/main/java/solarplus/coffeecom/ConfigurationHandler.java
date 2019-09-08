@@ -16,9 +16,9 @@ import java.util.ArrayList;
 
 public class ConfigurationHandler {
 
-	private final String CONFIG_FILENAME = "CONFIG.ccom";
+	private final String CONFIG_FILENAME = "CONFIG.txt";
 	
-	private final String CONFIG_PATH = "../../../CONFIG.ccom";
+	private final String CONFIG_PATH = "../../../CONFIG.txt";
 
 	private final String COMMENT_SYMBOL = "#";
 	
