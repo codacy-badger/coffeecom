@@ -22,14 +22,18 @@ Java is needed on the machine to run CoffeeCom. At the moment you need to compil
 **ACCESS FROM ANYWHERE (PORT FORWARDING):**
 
 1.  Create and assign a static IP to the machine running the CoffeeCom-server. (`Server.class`)
-2.  Open the desired port (check if there is any regulation/restriction/standard existing for that port)
-3.  Access the Coffeecom-server from anywhere
+2.  Open the desired port from within the router (check if there is any regulation/restriction/standard existing for that port)
+3.  Access the Coffeecom-server from anywhere using the static ip and port forwarded
 
 **DISCLAIMER:**
 
-I am not responsible for any misuse you may act through this software.
-I am not responsible for any loss of data, damage or value.
-This is an application solely intended for communication between individuals - use it with logic and common sense, and use it with good intentions.
+*  I am not responsible for any misuse or violation you may do or act through/using this software.
+
+*  I am not responsible for any loss of data, damage or value to you or anyone else.
+
+*  This is an application solely intended for communication between individuals - use it with logic, common sense and good intentions.
+
 USE THIS SOFTWARE AT YOUR OWN RISK.
+
 
 `@author` solarplus
