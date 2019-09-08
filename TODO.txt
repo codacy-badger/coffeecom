@@ -2,6 +2,8 @@ TODO:
 
 * Add support for multiple clients in one lobby
 
+* Update / Upgrade the README (especially the port forwarding-section)
+
 * Add a protocol-class for the server (the class should be handling input, commands etc.)
 
 * Create a CONFIG-file (to store username, settings, lobby-code etc.)
