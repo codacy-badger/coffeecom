@@ -24,12 +24,16 @@ public class Client {
 			// Fetching IP
 			System.out.println("=====> coffeecom");
 			System.out.println("You need to connect to a coffeecom-server.");
-			System.out.println("IP: ");
+			System.out.print("IP: ");
 			String ip = input.nextLine();
 
 			// Fetching port
-			System.out.println("PORT: ");
+			System.out.print("PORT: ");
 			int port = Integer.parseInt(input.nextLine());
+
+			// Fetching name
+			System.out.print("USERNAME: ");
+			String username = input.nextLine();
 
 			// Creating a socket => Connecting to server
 			Socket socket = new Socket(ip, port);
@@ -54,7 +58,7 @@ public class Client {
 				System.out.println(receivedLine);
 
 				// => Writing to server
-				System.out.print("[  " + format("CLIENT", YELLOW) + "  ] ");
+				System.out.print("[  " + format(username, YELLOW) + "  ] ");
 				out.write(input.nextLine());  // User writes in input
 				out.newLine();  // Ends the current line
 				out.flush();  // Sending msg.
