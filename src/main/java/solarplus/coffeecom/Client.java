@@ -52,8 +52,8 @@ public class Client {
 				System.out.println(receivedLine);
 
 				// => Writing to server
-				System.out.println("[  " + format("CLIENT", YELLOW) + "  ] ");
-				out.write(input.nextLine());  // Important to include '\n' at the end to end the current line
+				System.out.print("[  " + format("CLIENT", YELLOW) + "  ] ");
+				out.write(input.nextLine() + "\n");  // Important to include '\n' at the end to end the current line
 				out.flush();  // Sending msg.
 			} while (receivedLine != null);  // While stream has not ended
 		} catch (Exception e) {
