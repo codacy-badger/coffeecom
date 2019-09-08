@@ -55,7 +55,8 @@ public class Server {
 			BufferedReader in = new BufferedReader(inStreamReader);
 
 			// Sending welcome msg. from server
-			out.write("Welcome to " + APPLICATION_NAME + "\n");  // Important to include '\n' b.c. it ends the line
+			out.write("[  " + format("SYSTEM", RED) + "  ] Welcome to " + APPLICATION_NAME);  // Important to include '\n' b.c. it ends the line
+			out.newLine();  // End of current line
 			out.flush();  // Sending msg.
 
 			// Server-loop (runs while input from client(s) are not finished)
@@ -64,7 +65,8 @@ public class Server {
 				clientLine = in.readLine();  // Reading input from client(s)
 
 				// Echoing the input back to the client
-				out.write("[  " + format("SERVER", GREEN) + "  ] Received: " + clientLine + "\n");
+				out.write("[  " + format("SERVER", GREEN) + "  ] Received: " + clientLine);
+				out.newLine();  // End of current line
 				out.flush();
 
 				// Printing msg. to console

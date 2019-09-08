@@ -18,6 +18,8 @@ public class Client {
 	public static void main(String[] args) {
 		try {
 			Scanner input = new Scanner(System.in);  // For user-input
+			
+			clear();  // Clearing terminal
 
 			// Fetching IP
 			System.out.println("=====> coffeecom");
@@ -53,7 +55,8 @@ public class Client {
 
 				// => Writing to server
 				System.out.print("[  " + format("CLIENT", YELLOW) + "  ] ");
-				out.write(input.nextLine() + "\n");  // Important to include '\n' at the end to end the current line
+				out.write(input.nextLine());  // User writes in input
+				out.newLine();  // Ends the current line
 				out.flush();  // Sending msg.
 			} while (receivedLine != null);  // While stream has not ended
 		} catch (Exception e) {
