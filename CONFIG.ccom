@@ -1,7 +1,8 @@
-# Configurations-file (comments start with a '#')
+# ===> CONFIGURATIONS <===
+# Comments start with a '#'
 
-# Uncomment and edit below to configurate your program
-# => If these variables are set, you will not be asked to input them at start of program
+# Uncomment and edit below to configure CoffeeCom
+# If these variables are set, you will not be asked to input them at the start of CoffeeCom client/server
 #ip=123.456.78.9
 #port=12345
 #name=myName
@@ -9,7 +10,6 @@
 # Max clients server can handle
 max_clients=10
 
-# If you don't see colors in your console, make this var. false
+# If you don't see/want colors in your console, make this var. false
 activateColors=true
-
 
