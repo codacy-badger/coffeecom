@@ -1,5 +1,7 @@
 TODO:
 
+* Add support for multiple clients in one lobby
+
 * Create a CONFIG-file (to store username, settings, lobby-code etc.)
 
 * Make an option for users to disable colored text (store setting in CONFIG)
