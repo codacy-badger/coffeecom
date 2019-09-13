@@ -1,3 +1,6 @@
+/**
+ * The program clients should use to interact with a CoffeeCom-server.
+ */
 package solarplus.coffeecom.clientside;
 
 import static solarplus.coffeecom.formatting.OutputFormats.*;  // For formatting output to terminal
@@ -5,6 +8,7 @@ import static solarplus.coffeecom.formatting.OutputFormats.*;  // For formatting
 import java.net.Socket;
 
 import java.lang.Integer;
+import java.lang.Thread;
 
 import java.util.Scanner;
 
@@ -26,11 +30,11 @@ public class Client {
 			System.out.println("=====> coffeecom");
 			System.out.println("You need to connect to a coffeecom-server.");
 			System.out.print("IP: ");
-			String ip = input.nextLine();
+			String ip = "localhost";//input.nextLine();
 
 			// Fetching port
 			System.out.print("PORT: ");
-			int port = Integer.parseInt(input.nextLine());
+			int port = 1234; //Integer.parseInt(input.nextLine());
 
 			// Fetching name
 			System.out.print("USERNAME: ");
@@ -46,24 +50,22 @@ public class Client {
 			// <= Input from server
 			InputStreamReader readerIn = new InputStreamReader(socket.getInputStream());
 			BufferedReader in = new BufferedReader(readerIn);
+			
+			// CONSTANTLY LISTEN FOR INPUT FROM SERVER
+			InputListener listener = new InputListener(in);
+			Thread t = new Thread(listener);
+			t.start();
 
-			/* Client-loop
-			* When you write to the server, you get an instant-echo response
-			* After this response, which is normally just what you wrote to the server, you can send another String
-			* The first msg. received is normally a welcome-msg from server
-			*/
-			String receivedLine;  // Line received from server
+			/*
+			 * Loop - constantly asks user for input to be sent to server
+			 */
 			do {
-				// <= Getting input from server
-				receivedLine = in.readLine();
-				System.out.println(receivedLine);
-
 				// => Writing to server
 				System.out.print("[  " + format(username, YELLOW) + "  ] ");
-				out.write(input.nextLine());  // User writes in input
+				out.write("[  " + format(username, YELLOW) + "  ] " + input.nextLine());  // User writes in input
 				out.newLine();  // Ends the current line
 				out.flush();  // Sending msg.
-			} while (receivedLine != null);  // While stream has not ended
+			} while (true);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

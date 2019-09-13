@@ -15,11 +15,17 @@ import java.io.BufferedReader;
 
 import java.io.IOException;
 
+import java.util.ArrayList;
+
+import java.lang.Thread;
 import java.lang.Integer;
 
 public class Server {
 	
-	private static final String APPLICATION_NAME = "coffeecom";
+	private static final int MAX_CLIENTS = 10;
+	private static ArrayList<Socket> clients = new ArrayList<>();
+
+	private static final String APPLICATION_NAME = "CoffeeCom";
 
 	
 	/**
@@ -27,7 +33,7 @@ public class Server {
 	 */
 	public static void main(String[] args) {
 		// Getting port
-		int port = 0;  // Port of 0 automatically gives a new valid port
+		int port = 1234; //0;  // Port of 0 automatically gives a new valid port
 		if (args.length == 1)
 			port = Integer.parseInt(args[0]);  // Using port given as arg.
 
@@ -41,42 +47,45 @@ public class Server {
 			System.out.println("[  " + format("SERVER", GREEN) + "  ] PORT: " + serversocket.getLocalPort());
 			System.out.println("[  " + format("SERVER", GREEN) + "  ] Listening for connections..");
 
-			// Accepting and handling connection
-			Socket client = serversocket.accept();
-			System.out.println("[  " + format("SERVER", GREEN) + "  ] Client successfully connected");
-			System.out.println("[  " + format("CLIENT", YELLOW) + "  ] IP: " + client.getInetAddress().toString());
+			// Listen for connections => Create new Thread for handling connections for each connection/client
+			while (clients.size() < MAX_CLIENTS) {
+				Socket client = serversocket.accept();  // Connection to server
+				clients.add(client);  // Adding to list over clients
 
-			// BufferedWriter for writing out to client(s)
-			OutputStreamWriter outStreamWriter = new OutputStreamWriter(client.getOutputStream());
-			BufferedWriter out = new BufferedWriter(outStreamWriter);  // Using BufferedWriter to send msg. to client(s)
+				// Print to server that a new client is connected
+				System.out.println("[  " + format("SERVER", GREEN) + "  ] Client " + (clients.size()-1) + " connected");
+				System.out.println("[  " + format("CLIENT " + (clients.size()-1), YELLOW) + "  ] IP: " + client.getInetAddress().toString());
 
-			// BufferedReader for reading from client(s)
-			InputStreamReader inStreamReader = new InputStreamReader(client.getInputStream());
-			BufferedReader in = new BufferedReader(inStreamReader);
-
-			// Sending welcome msg. from server
-			out.write("[  " + format("SYSTEM", RED) + "  ] Welcome to " + APPLICATION_NAME);  // Important to include '\n' b.c. it ends the line
-			out.newLine();  // End of current line
-			out.flush();  // Sending msg.
-
-			// Server-loop (runs while input from client(s) are not finished)
-			String clientLine;  // Line sent from client(s)
-			do {
-				clientLine = in.readLine();  // Reading input from client(s)
-
-				// Echoing the input back to the client
-				out.write("[  " + format("SERVER", GREEN) + "  ] Received: " + clientLine);
-				out.newLine();  // End of current line
-				out.flush();
-
-				// Printing msg. to console
-				System.out.println("[  " + format("CLIENT", YELLOW) + "  ] " + clientLine);
-			} while(clientLine != null);  // clientLine = null ==> end of stream
+				ConnectionHandler ch = new ConnectionHandler(client);  // The clients handler
+				Thread t = new Thread(ch);  // Create a new thread for the client
+				t.start();  // Starts thread
+			}
 
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
 		} catch (Exception e) {
 			e.printStackTrace();
+		}
+	}
+
+	// The threads use this method to send msg to all clients
+	public static void broadcast(Socket originClient, String msg) {
+		System.out.println("[  " + format("BROADCAST", GREEN) + "  ] " + msg);
+		for (Socket client : clients) {
+			if (client == originClient)  // If originclient :> don't print to self
+				continue;
+			try {
+				// Using every socket's outputstream to send to corresponding client
+				OutputStreamWriter writerOut = new OutputStreamWriter(client.getOutputStream());
+				BufferedWriter out = new BufferedWriter(writerOut);
+
+				// Writing out to client
+				out.write(msg);
+				out.newLine();
+				out.flush();
+			} catch (IOException ioe) {
+				ioe.printStackTrace();
+			}
 		}
 	}
 
