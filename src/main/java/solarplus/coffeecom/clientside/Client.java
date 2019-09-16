@@ -30,11 +30,11 @@ public class Client {
 			System.out.println("=====> coffeecom");
 			System.out.println("You need to connect to a coffeecom-server.");
 			System.out.print("IP: ");
-			String ip = "localhost";//input.nextLine();
+			String ip = input.nextLine();
 
 			// Fetching port
 			System.out.print("PORT: ");
-			int port = 1234; //Integer.parseInt(input.nextLine());
+			int port = Integer.parseInt(input.nextLine());
 
 			// Fetching name
 			System.out.print("USERNAME: ");

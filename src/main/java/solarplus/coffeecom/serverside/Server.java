@@ -16,6 +16,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 
 import java.util.ArrayList;
+import java.util.Scanner;
 
 import java.lang.Thread;
 import java.lang.Integer;
@@ -32,10 +33,20 @@ public class Server {
 	 * This program can be started with one argument for port.
 	 */
 	public static void main(String[] args) {
+		Scanner input = new Scanner(System.in);
+
 		// Getting port
-		int port = 1234; //0;  // Port of 0 automatically gives a new valid port
+		int port = 0;
 		if (args.length == 1)
-			port = Integer.parseInt(args[0]);  // Using port given as arg.
+			port = Integer.parseInt(args[0]);
+		else {
+			try {
+				System.out.print("[  " + format("SYSTEM", RED) + "  ] Port: ");
+				port = Integer.parseInt(input.nextLine());  // Port of 0 automatically gives a new valid port
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 
 		try {
 			ServerSocket serversocket = new ServerSocket(port);
@@ -93,7 +104,7 @@ public class Server {
 	 * Clearing current terminal-screen.
 	 */
 	private static void clear() {
-		for (int i = 0; i < 50; i++)
+		for (int i = 0; i < 75; i++)
 			System.out.println("");
 	}
 }
