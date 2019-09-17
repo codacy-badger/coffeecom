@@ -1,5 +1,5 @@
-/**
- * The program clients should use to interact with a CoffeeCom-server.
+/*
+ * The class clients should use to interact with a CoffeeCom-server.
  */
 package solarplus.coffeecom.clientside;
 
@@ -19,56 +19,60 @@ import java.io.BufferedWriter;
 
 public class Client {
 
-	public static void main(String[] args) {
-		try {
-			Scanner input = new Scanner(System.in);  // For user-input
-			
-			// TODO: Implement clear() in formatting package
-			//clear();
+    private static final String APPLICATION_NAME = "CoffeeCom";
 
-			// Fetching IP
-			System.out.println("=====> coffeecom");
-			System.out.println("You need to connect to a coffeecom-server.");
-			System.out.print("IP: ");
-			String ip = input.nextLine();
+    public static void main(String[] args) {
+        try {
+            Scanner input = new Scanner(System.in);  // For user-input
 
-			// Fetching port
-			System.out.print("PORT: ");
-			int port = Integer.parseInt(input.nextLine());
+            // Welcome screen for clients
+            System.out.println("=====> " + APPLICATION_NAME + " <=====");
 
-			// Fetching name
-			System.out.print("USERNAME: ");
-			String username = input.nextLine();
+            // Fetching IP
+            displayNewLine("SYSTEM", "You need to connect to a " + APPLICATION_NAME + "-server.", RED);
+            display("SYSTEM", "IP: ", RED);
+            String ip = input.nextLine();
 
-			// Creating a socket => Connecting to server
-			Socket socket = new Socket(ip, port);
+            // Fetching port
+            display("SYSTEM", "PORT: ", RED);
+            int port = Integer.parseInt(input.nextLine());
 
-			// => Output to server
-			OutputStreamWriter writerOut = new OutputStreamWriter(socket.getOutputStream());
-			BufferedWriter out = new BufferedWriter(writerOut);
+            // Fetching name
+            display("SYSTEM", "USERNAME: ", RED);
+            String username = input.nextLine();
 
-			// <= Input from server
-			InputStreamReader readerIn = new InputStreamReader(socket.getInputStream());
-			BufferedReader in = new BufferedReader(readerIn);
-			
-			// CONSTANTLY LISTEN FOR INPUT FROM SERVER
-			InputListener listener = new InputListener(in);
-			Thread t = new Thread(listener);
-			t.start();
+            // Creating a socket and connecting to server
+            Socket socket = new Socket(ip, port);
 
-			/*
-			 * Loop - constantly asks user for input to be sent to server
-			 */
-			do {
-				// => Writing to server
-				System.out.print("[  " + format(username, YELLOW) + "  ] ");
-				out.write("[  " + format(username, YELLOW) + "  ] " + input.nextLine());  // User writes in input
-				out.newLine();  // Ends the current line
-				out.flush();  // Sending msg.
-			} while (true);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
+            // => Output to server
+            OutputStreamWriter writerOut = new OutputStreamWriter(socket.getOutputStream());
+            BufferedWriter out = new BufferedWriter(writerOut);
+
+            // <= Input from server
+            InputStreamReader readerIn = new InputStreamReader(socket.getInputStream());
+            BufferedReader in = new BufferedReader(readerIn);
+
+            // Constantly listening for input from server
+            InputListener listener = new InputListener(in);
+            Thread t = new Thread(listener);
+            t.start();
+
+            /*
+             * Loop - constantly asks user for input to be sent to server
+             */
+            do {
+                // Asking for input from user
+                display(username, "", YELLOW);
+                String inputMsg = input.nextLine();
+
+                // Writing to server
+                out.write("[  " + format(username, YELLOW) + "  ] " + inputMsg);
+                out.newLine();  // Ends the current line
+                out.flush();  // Sending msg.
+            } while (true);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
 
