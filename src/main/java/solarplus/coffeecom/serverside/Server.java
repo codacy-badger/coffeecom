@@ -84,11 +84,11 @@ public class Server {
                 String inetAddress = client.getInetAddress().toString();
 
                 // Broadcast to other clients that a new client has connected
-                broadcast(client, "[  " + format("SERVER", GREEN) + "  ] Client + " + clientNum + " connected.");
+                broadcast(client, "[  " + format("SERVER", GREEN) + "  ] Client " + clientNum + " connected.");
 
                 // Print to server that a new client is connected
-                displayNewLine("SERVER", "Client " + clientNum + "connected", GREEN);
-                displayNewLine("CLIENT", "IP: " + inetAddress, YELLOW);
+                displayNewLine("SERVER", "Client " + clientNum + " connected", GREEN);
+                displayNewLine("CLIENT " + clientNum, "IP: " + inetAddress, YELLOW);
 
                 ConnectionHandler ch = new ConnectionHandler(client);  // Creating a new ConnectionHandler for the client
                 Thread t = new Thread(ch);  // Create a new thread for the client using the ConnectionHandler

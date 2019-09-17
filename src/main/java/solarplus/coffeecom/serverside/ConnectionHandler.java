@@ -47,7 +47,7 @@ public class ConnectionHandler implements Runnable {
 
             // Server: sending welcome message
             // TODO: Write out current clients connected to the lobby
-            out.write("[  " + format("COFFEECOM", GREEN) + "  ] Connected.");
+            out.write("[  " + format("COFFEECOM", GREEN) + "  ] Connected to server.");
             out.newLine();
             out.flush();
 
