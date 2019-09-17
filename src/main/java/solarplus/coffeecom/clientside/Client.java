@@ -53,7 +53,7 @@ public class Client {
             BufferedReader in = new BufferedReader(readerIn);
 
             // Constantly listening for input from server
-            InputListener listener = new InputListener(in);
+            InputListener listener = new InputListener(in, username);
             Thread t = new Thread(listener);
             t.start();
 
