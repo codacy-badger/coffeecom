@@ -9,7 +9,9 @@ package solarplus.coffeecom.serverside;
 import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 import static solarplus.coffeecom.formatting.OutputFormats.*;
@@ -106,13 +108,31 @@ public class Server {
     }
 
     /**
+     * Returns current time of server.
+     *
+     * @return A String representing the current time of server
+     */
+    private static String getCurrentServerTime() {
+        // Fetching time from server
+        Date time = new Date();
+
+        // Formatting time to HH:ss (hour:second)
+        SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
+
+        return timeFormat.format(time);
+    }
+
+    /**
      * Sends a message to all clients except the origin client.
      * The client who sent the message already sees the message in own console -> No need to broadcast to that client.
+     * Also prints time of broadcast.
      *
      * @param originClient The `Socket` that sent the message
      * @param msg          The message to be broadcasted
      */
     public static void broadcast(Socket originClient, String username, String msg) {
+        displayNewLine(username + " " + format(getCurrentServerTime(), GREEN), msg, YELLOW);  // Printing out input to console
+
         // Iterating through all clients connected to the server
         for (Socket client : clients) {
             if (client == originClient)  // If current client is the client who sent the message -> Don't send
@@ -123,7 +143,8 @@ public class Server {
                 BufferedWriter out = new BufferedWriter(writerOut);
 
                 // Writing out to client
-                out.write("[  " + username + "  ] " + msg);
+                String outLine = "[  " + username + " " + getCurrentServerTime() + " ] " + msg;
+                out.write(outLine);
                 out.newLine();  // Creating newline to end the current line
                 out.flush();  // Send msg.
             } catch (IOException ioe) {

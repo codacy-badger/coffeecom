@@ -59,8 +59,6 @@ public class ConnectionHandler implements Runnable {
             do {
                 clientLine = in.readLine();  // Reading input from client
 
-                displayNewLine(username, clientLine, YELLOW);  // Printing out input to console
-
                 Server.broadcast(this.client, username, clientLine);  // Broadcasting this message to all other clients
             } while (clientLine != null);  // clientLine = null ==> end of stream
 
