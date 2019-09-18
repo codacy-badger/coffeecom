@@ -1,39 +1,63 @@
-/*
- * This runnable is used in a Thread as a constant listener to input.
- * Prints input to clients console.
- */
 package solarplus.coffeecom.clientside;
 
-import java.lang.Runnable;
+import solarplus.coffeecom.formatting.ConsoleOutput;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 
-import static solarplus.coffeecom.formatting.OutputFormats.YELLOW;
-import static solarplus.coffeecom.formatting.OutputFormats.display;
-
+/**
+ * Class for constantly listening to input from server.
+ * One-to-one relationship: one client has one `Thread` that runs `InputListener`.
+ * Prints input to clients console.
+ */
 public class InputListener implements Runnable {
 
-	// Standard input to listen to
-	private BufferedReader in;
+    /**
+     * The standard input from server
+     */
+    private BufferedReader serverIn;
 
-    // The clients username
+    /**
+     * The username associated with the client
+     */
     private String username;
 
-    public InputListener(BufferedReader in, String username) {
-		this.in = in;
+    /**
+     * Controls output to console
+     */
+    private static ConsoleOutput out;
+
+    /**
+     * Sets standard output and clients username.
+     *
+     * @param serverIn The standard input from the server the client is connected to
+     * @param username The username associated with the client
+     */
+    InputListener(BufferedReader serverIn, String username) {
+        // Decides if color formatting should be used
+        // TODO: Get `activateColors` from user input or configuration file
+        boolean activateColors = true;
+        out = new ConsoleOutput(activateColors);  // Activates `ConsoleOutput` with colors on
+
+        this.serverIn = serverIn;
         this.username = username;
-	}
+    }
 
-	public void run() {
-		while (true) {
-			try {
-                System.out.println("\n" + in.readLine());
+    /**
+     * This method runs on `Thread.start()`.
+     * Constantly listens for input from server.
+     */
+    public void run() {
+        try {
+            while (true) {
+                System.out.println("\n" + serverIn.readLine());
 
-                // Every time there is input, print new line for client to write on (DIRTY FIX)
-                display(username, "", YELLOW);
-			} catch (IOException ioe) {
-				ioe.printStackTrace();
-			}
-		}
-	}
+                // Every time there is input, print new line for client to write on
+                // TODO: DIRTY FIX -> Create a better way of handling text mess when somebody writes to you while you are writing
+                out.clientMessagePrint(username, "");
+            }
+        } catch (IOException ioe) {
+            ioe.printStackTrace();
+        }
+    }
 }

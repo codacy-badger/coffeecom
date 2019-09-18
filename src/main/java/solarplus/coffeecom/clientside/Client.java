@@ -3,62 +3,73 @@
  */
 package solarplus.coffeecom.clientside;
 
-import static solarplus.coffeecom.formatting.OutputFormats.*;  // For formatting output to terminal
+import solarplus.coffeecom.formatting.ConsoleOutput;
 
-import java.net.Socket;
-
-import java.lang.Integer;
-import java.lang.Thread;
-
-import java.util.Scanner;
-
-import java.io.OutputStreamWriter;
-import java.io.InputStreamReader;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.Socket;
+import java.util.Scanner;
 
+/**
+ * Main class for the CoffeeCom-client - connects and communicates with the CoffeeCom-server.
+ */
 public class Client {
 
+    /**
+     * Name of application.
+     */
     private static final String APPLICATION_NAME = "CoffeeCom";
 
+    /**
+     * Controls output to console
+     */
+    private static ConsoleOutput out;
+
     public static void main(String[] args) {
+        // Decides if color formatting should be used
+        // TODO: Get `activateColors` from user input or configuration file
+        boolean activateColors = true;
+        out = new ConsoleOutput(activateColors);  // Activates `ConsoleOutput` with colors on
+
         try {
             Scanner input = new Scanner(System.in);  // For user-input
 
-            // Welcome screen for clients
+            // Welcome screen
+            // TODO: Print CoffeeCom-logo
             System.out.println("=====> " + APPLICATION_NAME + " <=====");
 
             // Fetching IP
-            displayNewLine("SYSTEM", "You need to connect to a " + APPLICATION_NAME + "-server.", RED);
-            display("SYSTEM", "IP: ", RED);
+            out.systemMessage("You need to connect to a " + APPLICATION_NAME + "-server.");
+            out.systemMessagePrint("IP: ");
             String ip = input.nextLine();
 
             // Fetching port
-            display("SYSTEM", "PORT: ", RED);
+            out.systemMessagePrint("PORT: ");
             int port = Integer.parseInt(input.nextLine());
 
             // Fetching name
-            display("SYSTEM", "USERNAME: ", RED);
+            out.systemMessagePrint("USERNAME: ");
             String username = input.nextLine();
 
             // Creating a socket and connecting to server
             Socket socket = new Socket(ip, port);
 
-            // => Output to server
-            OutputStreamWriter writerOut = new OutputStreamWriter(socket.getOutputStream());
-            BufferedWriter out = new BufferedWriter(writerOut);
+            // Output to server
+            BufferedWriter serverOut = new BufferedWriter(new OutputStreamWriter(socket.getOutputStream()));
 
-            // <= Input from server
-            InputStreamReader readerIn = new InputStreamReader(socket.getInputStream());
-            BufferedReader in = new BufferedReader(readerIn);
+            // Input from server
+            BufferedReader serverIn = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 
             // Sending username to server
-            out.write(username);
-            out.newLine();  // Ends the current line
-            out.flush();  // Sending msg.
+            // TODO: Implement a better way of sending username and possibly timestamps
+            serverOut.write(username);
+            serverOut.newLine();  // Ends the current line
+            serverOut.flush();  // Sending msg.
 
             // Constantly listening for input from server
-            InputListener listener = new InputListener(in, username);
+            InputListener listener = new InputListener(serverIn, username);
             Thread t = new Thread(listener);
             t.start();
 
@@ -66,14 +77,15 @@ public class Client {
              * Loop - constantly asks user for input to be sent to server
              */
             do {
+                // TODO: Implement commands from user, like '/exit'
                 // Asking for input from user
-                display(username, "", YELLOW);
+                out.clientMessagePrint(username, "");
                 String inputMsg = input.nextLine();
 
                 // Writing to server
-                out.write(inputMsg);
-                out.newLine();  // Ends the current line
-                out.flush();  // Sending msg.
+                serverOut.write(inputMsg);
+                serverOut.newLine();  // Ends the current line
+                serverOut.flush();  // Sending msg.
             } while (true);
         } catch (Exception e) {
             e.printStackTrace();

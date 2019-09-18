@@ -1,10 +1,6 @@
-/*
- * Run this class to start the server.
- *
- * @param args [OPTIONAL] The port the server should try to connect to
- * @author solarplus
- */
 package solarplus.coffeecom.serverside;
+
+import solarplus.coffeecom.formatting.ConsoleOutput;
 
 import java.io.*;
 import java.net.ServerSocket;
@@ -14,25 +10,51 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.Scanner;
 
-import static solarplus.coffeecom.formatting.OutputFormats.*;
-
+/**
+ * The main class for the CoffeeCom-server - configures and runs the server.
+ * Accepts one argument - the port to connect to.
+ */
 public class Server {
 
+    /**
+     * Name of application.
+     */
     private static final String APPLICATION_NAME = "CoffeeCom";
 
-    // Max amount of clients that can connect
+    /**
+     * Max amount of clients that can connect to the server
+     */
     private static final int MAX_CLIENTS = 10;
 
-    // Contain references to all clients (Sockets) connected to the server
+    /**
+     * Contain references to all clients (Sockets) connected to the server
+     */
     private static ArrayList<Socket> clients = new ArrayList<>();
 
-    // Contain all names in the server
-    public static ArrayList<String> usernames = new ArrayList<>();
+    /**
+     * Contain all usernames for clients connected to the server
+     */
+    private static ArrayList<String> usernames = new ArrayList<>();
 
     /**
-     * This program can be started with one argument for port-number.
+     * Controls output to console
+     */
+    private static ConsoleOutput out;
+
+    /**
+     * Main method for the CoffeeCom-`Server`.
+     *
+     * @param args Should be one argument - the port you want to connect the server to
      */
     public static void main(String[] args) {
+        // TODO: Print CoffeeCom-logo
+        // TODO: Proper startup-screen
+
+        // Decides if color formatting should be used
+        // TODO: Get `activateColors` from user input or configuration file
+        boolean activateColors = true;
+        out = new ConsoleOutput(activateColors);  // Activates `ConsoleOutput` with colors on
+
         // Gets port number from arguments, user input or default value
         int port = getPort(args);
 
@@ -72,14 +94,14 @@ public class Server {
             // Gathering information from client
             String inetAddress = client.getInetAddress().toString();
 
-            displayNewLine("SERVER", "Awaiting username from client...", RED);
+            out.serverMessage("Awaiting username from client...");
             String username = in.readLine();  // Client always sends a username before anything else
             usernames.add(username);
-            displayNewLine("SERVER", "Username from client received!", RED);
+            out.serverMessage("Username from client received!");
 
             // Print to server that a new client is connected
-            displayNewLine("SERVER", username + " connected", GREEN);
-            displayNewLine(username, "IP: " + inetAddress, YELLOW);
+            out.serverMessage(username + " connected.");
+            out.serverMessage("IP: " + inetAddress);
 
             // Broadcast to other clients that a new client has connected
             broadcast(client, "SERVER", username + " has connected.");
@@ -123,6 +145,24 @@ public class Server {
     }
 
     /**
+     * Fetches an ArrayList<String> of all usernames connected to the server.
+     *
+     * @return An ArrayList<String> containing usernames
+     */
+    public static ArrayList<String> getUsernames() {
+        return usernames;
+    }
+
+    /**
+     * Gets all clients connected to server.
+     *
+     * @return An ArrayList<Socket> with clients
+     */
+    public static ArrayList<Socket> getClients() {
+        return clients;
+    }
+
+    /**
      * Sends a message to all clients except the origin client.
      * The client who sent the message already sees the message in own console -> No need to broadcast to that client.
      * Also prints time of broadcast.
@@ -131,7 +171,7 @@ public class Server {
      * @param msg          The message to be broadcasted
      */
     public static void broadcast(Socket originClient, String username, String msg) {
-        displayNewLine(username + " " + format(getCurrentServerTime(), GREEN), msg, YELLOW);  // Printing out input to console
+        out.clientMessage(username, msg + "   [" + getCurrentServerTime() + "]");
 
         // Iterating through all clients connected to the server
         for (Socket client : clients) {
@@ -148,7 +188,7 @@ public class Server {
                 out.newLine();  // Creating newline to end the current line
                 out.flush();  // Send msg.
             } catch (IOException ioe) {
-                System.err.println("[  " + format("SYSTEM", RED) + "  ] Error: Could not broadcast message: \"" + msg + "\" from " + username + ".");
+                out.systemErrorMessage("Error: Could not broadcast message: \"" + msg + "\" from " + username + ".");
                 ioe.printStackTrace();
             }
         }
@@ -161,38 +201,33 @@ public class Server {
      * @param args The arguments given when executing the program
      */
     private static int getPort(String[] args) {
-        clear();
+        out.clear();
         System.out.println("=====> " + APPLICATION_NAME + ":CONFIG" + " <=====");
 
         // Trying to get the port from `args`
         if (args.length == 1) {
             try {
-                displayNewLine("SYSTEM", "Port number successfully parsed.", RED);
-                display("SYSTEM", "Starting server ", RED);
-                loadingScreen(3000, 5);
+                out.systemMessage("Port number successfully parsed.");
+                out.systemMessage("Starting server...");
 
                 return Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
-                displayNewLine("SYSTEM", "Could not parse port number", RED);
+                out.systemMessage("Could not parse port-number.");
             }
         }
 
         // Getting port via input from user
         else {
             try {
-                display("SYSTEM", "Input port: ", RED);
+                out.systemMessagePrint("PORT: ");
 
                 // Getting input from user
                 Scanner input = new Scanner(System.in);
                 return Integer.parseInt(input.nextLine());
             } catch (NumberFormatException nfe) {
-                displayNewLine("SYSTEM", "Could not parse port number, assigning automatic port.", RED);
-                display("SYSTEM", "Starting server ", RED);
-                loadingScreen(5000, 5);
+                out.systemMessage("Could not parse port number, assigning automatic port.");
             } catch (Exception e) {
-                displayNewLine("SYSTEM", "Something went wrong collecting input, assigning automatic port.", RED);
-                display("SYSTEM", "Starting server ", RED);
-                loadingScreen(5000, 5);
+                out.systemMessage("Something went wrong gathering input, assigning automatic port.");
             }
         }
 
@@ -219,10 +254,10 @@ public class Server {
      * @param serverSocket The ServerSocket to gather information from
      */
     private static void showStartupMessage(ServerSocket serverSocket) {
-        clear();
+        out.clear();
         System.out.println("=====> " + APPLICATION_NAME + " <=====");
-        displayNewLine("SYSTEM", format("Successfully", GREEN) + " created server-socket", RED);
-        displayNewLine("SERVER", "PORT: " + serverSocket.getLocalPort(), GREEN);
-        displayNewLine("SERVER", "Listening for connections..", GREEN);
+        out.systemMessage("Successfully created server-socket.");
+        out.serverMessage("PORT: " + serverSocket.getLocalPort());
+        out.serverMessage("Listening for connections..");
     }
 }

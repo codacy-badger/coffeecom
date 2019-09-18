@@ -1,69 +1,91 @@
 package solarplus.coffeecom.serverside;
 
+import solarplus.coffeecom.formatting.ConsoleOutput;
+
 import java.io.*;
 import java.net.Socket;
 import java.net.SocketException;
 
-import static solarplus.coffeecom.formatting.OutputFormats.*;
-
+/**
+ * Class used for handling each connection the server has to a client.
+ * One-to-many relationship: one server can have multiple clients.
+ * Therefore a server can have multiple `Thread`s, one for each client, where one `Thread` runs `ConnectionHandler`.
+ */
 public class ConnectionHandler implements Runnable {
 
-    // The connection/client to handle
+    /**
+     * The connection/client to handle
+     */
     private Socket client;
 
-    // The clients username
+    /**
+     * The clients username
+     */
     private String username;
 
-    // The standard output to the client
-    private BufferedWriter out;
-
-    // The standard input to the client
-    private BufferedReader in;
+    /**
+     * The standard output to the client
+     */
+    private BufferedWriter clientOut;
 
     /**
-     * Constructor for each client-connection, assigning client.
-     *
-     * @param client A reference to the client
+     * The standard input from the client
      */
-    public ConnectionHandler(Socket client, String username) {
+    private BufferedReader clientIn;
+
+    /**
+     * A `ConsoleOutput` for writing formatted text to console
+     */
+    ConsoleOutput out = new ConsoleOutput(true);
+
+    /**
+     * Constructor for each client-connection.
+     * Gets clients socket and username and stores them.
+     *
+     * @param client   A reference to the client
+     * @param username The clients username
+     */
+    ConnectionHandler(Socket client, String username) {
         this.client = client;
         this.username = username;
     }
 
     /**
-     * This method runs on Thread.start().
+     * This method runs on `Thread.start()`.
      */
     public void run() {
         try {
-            // => Handling output
-            OutputStreamWriter outputWriter = new OutputStreamWriter(client.getOutputStream());
-            out = new BufferedWriter(outputWriter);
+            // Handling output to client
+            clientOut = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
 
-            // <= Handling input
-            InputStreamReader inputReader = new InputStreamReader(client.getInputStream());
-            in = new BufferedReader(inputReader);
+            // Handling input from client
+            clientIn = new BufferedReader(new InputStreamReader(client.getInputStream()));
 
-            // Creating a `String` with all users connected
+            // Creating a String displaying all clients connected to the server
             StringBuilder connectedClients = new StringBuilder();
-            for (String name : Server.usernames)
+            for (String name : Server.getUsernames())
                 connectedClients.append(name).append(" ");
 
             // Welcome-msg to client
             // TODO: Improve method of displaying clients in lobby
-            out.write("[  " + format("COFFEECOM", GREEN) + "  ] Connected to server. Lobby: " + connectedClients);
-            out.newLine();
-            out.flush();
+            clientOut.write(out.serverMessageGet("Connected to server.   Lobby [" + connectedClients + "]"));
+            clientOut.newLine();
+            clientOut.flush();
 
-            // Server-loop (runs while input from client is not finished)
-            String clientLine;  // Line sent from client
+            // Connection-loop (runs while input from client is not finished)
+            String clientInputLine;  // Line sent from client
             do {
-                clientLine = in.readLine();  // Reading input from client
+                clientInputLine = clientIn.readLine();  // Reading input from client
 
-                Server.broadcast(this.client, username, clientLine);  // Broadcasting this message to all other clients
-            } while (clientLine != null);  // clientLine = null ==> end of stream
+                Server.broadcast(this.client, username, clientInputLine);  // Broadcasting this message to all other clients
+            } while (clientInputLine != null);  // clientLine == null ==> end of stream
 
         } catch (SocketException se) {
-            displayNewLine("SERVER", "Client " + username + " disconnected.", GREEN);
+            out.serverMessage("Client " + username + " disconnected.");
+
+            // TODO: Create a better way of removing client/username
+            Server.getClients().remove(this.client);  // Removes client from server
+            Server.getUsernames().remove(username);  // Removes username from server
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
