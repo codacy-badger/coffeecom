@@ -2,6 +2,7 @@ package solarplus.coffeecom.serverside;
 
 import java.io.*;
 import java.net.Socket;
+import java.net.SocketException;
 
 import static solarplus.coffeecom.formatting.OutputFormats.*;
 
@@ -45,7 +46,7 @@ public class ConnectionHandler implements Runnable {
             // Creating a `String` with all users connected
             StringBuilder connectedClients = new StringBuilder();
             for (String name : Server.usernames)
-                connectedClients.append(name).append(", ");
+                connectedClients.append(name).append(" ");
 
             // Welcome-msg to client
             // TODO: Improve method of displaying clients in lobby
@@ -63,6 +64,8 @@ public class ConnectionHandler implements Runnable {
                 Server.broadcast(this.client, username, clientLine);  // Broadcasting this message to all other clients
             } while (clientLine != null);  // clientLine = null ==> end of stream
 
+        } catch (SocketException se) {
+            displayNewLine("SERVER", "Client " + username + " disconnected.", GREEN);
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
