@@ -9,6 +9,7 @@ This application only works inside a terminal, no GUI (application-window) is pr
 **This project is still in ALPHA-version.**
 
 **IMAGES:**
+
 ![Server-side](server_console.png "A peek in the console of the server")
 
 ![Client-side](client_console.png "A peek in the console of the client")
