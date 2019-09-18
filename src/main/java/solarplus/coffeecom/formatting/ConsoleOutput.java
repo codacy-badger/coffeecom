@@ -3,7 +3,7 @@ package solarplus.coffeecom.formatting;
 import org.fusesource.jansi.Ansi;
 import org.fusesource.jansi.AnsiConsole;
 
-import static org.fusesource.jansi.Ansi.Color.RED;
+import static org.fusesource.jansi.Ansi.Color.*;
 
 /**
  * This class is used for writing out text to console.
@@ -16,8 +16,8 @@ public class ConsoleOutput {
 
     // Color settings
     private final Ansi.Color systemClr = RED;
-    private final Ansi.Color serverClr = RED;
-    private final Ansi.Color clientClr = RED;
+    private final Ansi.Color serverClr = GREEN;
+    private final Ansi.Color clientClr = YELLOW;
 
     /**
      * Calls `AnsiConsole.systemInstall()` or `AnsiConsole.systemUninstall()` based on the `install` argument
