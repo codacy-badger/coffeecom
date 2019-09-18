@@ -1,16 +1,9 @@
 package solarplus.coffeecom.serverside;
 
+import java.io.*;
 import java.net.Socket;
 
-import java.lang.Runnable;
-
-import java.io.OutputStreamWriter;
-import java.io.InputStreamReader;
-import java.io.BufferedWriter;
-import java.io.BufferedReader;
-import java.io.IOException;
-
-import static solarplus.coffeecom.formatting.OutputFormats.*;  // Importing all static fields and methods
+import static solarplus.coffeecom.formatting.OutputFormats.*;
 
 public class ConnectionHandler implements Runnable {
 
@@ -59,6 +52,8 @@ public class ConnectionHandler implements Runnable {
             String clientLine;  // Line sent from client
             do {
                 clientLine = in.readLine();  // Reading input from client
+
+                displayNewLine(username, clientLine, YELLOW);  // Printing out input to console
 
                 Server.broadcast(this.client, username, clientLine);  // Broadcasting this message to all other clients
             } while (clientLine != null);  // clientLine = null ==> end of stream
