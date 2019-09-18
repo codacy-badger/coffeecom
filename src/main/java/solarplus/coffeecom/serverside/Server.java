@@ -24,6 +24,9 @@ public class Server {
     // Contain references to all clients (Sockets) connected to the server
     private static ArrayList<Socket> clients = new ArrayList<>();
 
+    // Contain all names in the server
+    public static ArrayList<String> usernames = new ArrayList<>();
+
     /**
      * This program can be started with one argument for port-number.
      */
@@ -69,6 +72,7 @@ public class Server {
 
             displayNewLine("SERVER", "Awaiting username from client...", RED);
             String username = in.readLine();  // Client always sends a username before anything else
+            usernames.add(username);
             displayNewLine("SERVER", "Username from client received!", RED);
 
             // Print to server that a new client is connected

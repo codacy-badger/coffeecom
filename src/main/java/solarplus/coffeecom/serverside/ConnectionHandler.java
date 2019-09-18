@@ -42,9 +42,14 @@ public class ConnectionHandler implements Runnable {
             InputStreamReader inputReader = new InputStreamReader(client.getInputStream());
             in = new BufferedReader(inputReader);
 
-            // Server: sending welcome message
-            // TODO: Write out current clients connected to the lobby
-            out.write("[  " + format("COFFEECOM", GREEN) + "  ] Connected to server.");
+            // Creating a `String` with all users connected
+            StringBuilder connectedClients = new StringBuilder();
+            for (String name : Server.usernames)
+                connectedClients.append(name).append(", ");
+
+            // Welcome-msg to client
+            // TODO: Improve method of displaying clients in lobby
+            out.write("[  " + format("COFFEECOM", GREEN) + "  ] Connected to server. Lobby: " + connectedClients);
             out.newLine();
             out.flush();
 
