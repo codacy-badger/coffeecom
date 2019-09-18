@@ -17,6 +17,9 @@ public class ConnectionHandler implements Runnable {
     // The connection/client to handle
     private Socket client;
 
+    // The clients username
+    private String username;
+
     // The standard output to the client
     private BufferedWriter out;
 
@@ -28,8 +31,9 @@ public class ConnectionHandler implements Runnable {
      *
      * @param client A reference to the client
      */
-    public ConnectionHandler(Socket client) {
+    public ConnectionHandler(Socket client, String username) {
         this.client = client;
+        this.username = username;
     }
 
     /**
@@ -55,9 +59,8 @@ public class ConnectionHandler implements Runnable {
             String clientLine;  // Line sent from client
             do {
                 clientLine = in.readLine();  // Reading input from client
-                System.out.println(clientLine);  // Client sends a str with identifier, e.g. [  JONAS  ] "Msg"
 
-                Server.broadcast(this.client, clientLine);  // Broadcasting this message to all other clients
+                Server.broadcast(this.client, username, clientLine);  // Broadcasting this message to all other clients
             } while (clientLine != null);  // clientLine = null ==> end of stream
 
         } catch (IOException ioe) {

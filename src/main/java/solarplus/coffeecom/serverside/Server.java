@@ -6,9 +6,7 @@
  */
 package solarplus.coffeecom.serverside;
 
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
+import java.io.*;
 import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.ArrayList;
@@ -83,14 +81,20 @@ public class Server {
                 int clientNum = clients.size() - 1;
                 String inetAddress = client.getInetAddress().toString();
 
+                // Client sends username
+                InputStreamReader readerIn = new InputStreamReader(client.getInputStream());
+                BufferedReader in = new BufferedReader(readerIn);
+                String username = in.readLine();
+
+
                 // Broadcast to other clients that a new client has connected
-                broadcast(client, "[  " + format("SERVER", GREEN) + "  ] Client " + clientNum + " connected.");
+                broadcast(client, "SERVER", username + " has connected.");
 
                 // Print to server that a new client is connected
-                displayNewLine("SERVER", "Client " + clientNum + " connected", GREEN);
-                displayNewLine("CLIENT " + clientNum, "IP: " + inetAddress, YELLOW);
+                displayNewLine("SERVER", "Client (" + clientNum + ") " + username + " connected", GREEN);
+                displayNewLine(username, "IP: " + inetAddress, YELLOW);
 
-                ConnectionHandler ch = new ConnectionHandler(client);  // Creating a new ConnectionHandler for the client
+                ConnectionHandler ch = new ConnectionHandler(client, username);  // Creating a new ConnectionHandler for the client
                 Thread t = new Thread(ch);  // Create a new thread for the client using the ConnectionHandler
                 // Starts thread
                 try {
@@ -114,8 +118,8 @@ public class Server {
      * @param originClient The `Socket` that sent the message
      * @param msg          The message to be broadcasted
      */
-    public static void broadcast(Socket originClient, String msg) {
-        System.out.println(msg);
+    public static void broadcast(Socket originClient, String username, String msg) {
+        System.out.println("[  " + username + "  ] " + msg);
 
         // Iterating through all clients connected to the server
         for (Socket client : clients) {
@@ -127,7 +131,7 @@ public class Server {
                 BufferedWriter out = new BufferedWriter(writerOut);
 
                 // Writing out to client
-                out.write(msg);
+                out.write("[  " + username + "  ] " + msg);
                 out.newLine();  // Creating newline to end the current line
                 out.flush();
             } catch (IOException ioe) {

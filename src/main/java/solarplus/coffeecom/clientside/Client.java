@@ -52,6 +52,11 @@ public class Client {
             InputStreamReader readerIn = new InputStreamReader(socket.getInputStream());
             BufferedReader in = new BufferedReader(readerIn);
 
+            // Sending username to server
+            out.write(username);
+            out.newLine();  // Ends the current line
+            out.flush();  // Sending msg.
+
             // Constantly listening for input from server
             InputListener listener = new InputListener(in, username);
             Thread t = new Thread(listener);
@@ -66,7 +71,7 @@ public class Client {
                 String inputMsg = input.nextLine();
 
                 // Writing to server
-                out.write("[  " + format(username, YELLOW) + "  ] " + inputMsg);
+                out.write(inputMsg);
                 out.newLine();  // Ends the current line
                 out.flush();  // Sending msg.
             } while (true);
