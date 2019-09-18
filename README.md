@@ -6,7 +6,7 @@ The purpose of this application is to provide a tool for straight forward and ea
 
 This application only works inside a terminal, no GUI (application-window) is provided.
 
-**This project is still in ALPHA-version.**
+**This project is still in it's ALPHA-phase.**
 
 **IMAGES:**
 
