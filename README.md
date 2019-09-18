@@ -6,9 +6,16 @@ The purpose of this application is to provide a tool for straight forward and ea
 
 This application only works inside a terminal, no GUI (application-window) is provided.
 
+**This project is still in ALPHA-version.**
+
+**IMAGES:**
+![Server-side](server_console.png "A peek in the console of the server")
+
+![Client-side](client_console.png "A peek in the console of the client")
+
 **REQUIRED:**
 
-CoffeeCom requires `Java` to run. At the moment you also need to compile the sources yourself, so you need the [Java JDK](https://www.oracle.com/java/technologies/jdk8-downloads.html) (development kit). Java version **8** should work with this software.
+CoffeeCom requires `Java` to run. At the moment you also need to compile the sources yourself, so you need the [Java JDK](https://www.oracle.com/java/technologies/jdk8-downloads.html) (development kit).
 
 **INSTALLATION:**
 
