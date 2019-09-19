@@ -43,7 +43,7 @@ CoffeeCom requires `Java` to run. At the moment you also need to compile the sou
 
 USE THIS SOFTWARE AT YOUR OWN RISK.
 
-**THANKS TO:** :heart:
+**THANKS TO:** ❤
 
 * [Jansi](https://github.com/fusesource/jansi) for enabling CoffeeCom to utilize colors and formatting in console.
 
