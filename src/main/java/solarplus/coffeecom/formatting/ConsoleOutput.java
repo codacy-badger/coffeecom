@@ -44,8 +44,19 @@ public class ConsoleOutput {
      * Clears the current screen.
      */
     public void clear() {
+        for (int i = 0; i < 85; i++)
+            System.out.println();
+    }
+
+    /**
+     * Returns a color-formatted String.
+     *
+     * @param msg The message to be formatted
+     * @param clr The `Ansi.Color` to color the string in
+     */
+    public String formatString(String msg, Ansi.Color clr) {
         reset();
-        ansi.eraseScreen();
+        return ansi.fg(clr).a(msg).reset().toString();
     }
 
     /**

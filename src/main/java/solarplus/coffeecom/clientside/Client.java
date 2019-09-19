@@ -3,6 +3,7 @@
  */
 package solarplus.coffeecom.clientside;
 
+import solarplus.coffeecom.formatting.CoffeeComBanner;
 import solarplus.coffeecom.formatting.ConsoleOutput;
 
 import java.io.BufferedReader;
@@ -36,9 +37,10 @@ public class Client {
         try {
             Scanner input = new Scanner(System.in);  // For user-input
 
-            // Welcome screen
-            // TODO: Print CoffeeCom-logo
-            System.out.println("=====> " + APPLICATION_NAME + " <=====");
+            // Welcome screen -> Printing banner
+            out.clear();
+            CoffeeComBanner.printBanner();
+            System.out.println();  // Empty line to give more space to banner
 
             // Fetching IP
             out.systemMessage("You need to connect to a " + APPLICATION_NAME + "-server.");

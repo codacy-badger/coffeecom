@@ -1,5 +1,6 @@
 package solarplus.coffeecom.serverside;
 
+import solarplus.coffeecom.formatting.CoffeeComBanner;
 import solarplus.coffeecom.formatting.ConsoleOutput;
 
 import java.io.*;
@@ -47,13 +48,15 @@ public class Server {
      * @param args Should be one argument - the port you want to connect the server to
      */
     public static void main(String[] args) {
-        // TODO: Print CoffeeCom-logo
-        // TODO: Proper startup-screen
-
         // Decides if color formatting should be used
         // TODO: Get `activateColors` from user input or configuration file
         boolean activateColors = true;
         out = new ConsoleOutput(activateColors);  // Activates `ConsoleOutput` with colors on
+
+        // Welcome screen -> Printing banner
+        out.clear();
+        CoffeeComBanner.printBanner();
+        System.out.println();  // Empty line to give more space to banner
 
         // Gets port number from arguments, user input or default value
         int port = getPort(args);
@@ -209,6 +212,7 @@ public class Server {
             try {
                 out.systemMessage("Port number successfully parsed.");
                 out.systemMessage("Starting server...");
+                out.clear();
 
                 return Integer.parseInt(args[0]);
             } catch (NumberFormatException nfe) {
@@ -255,7 +259,8 @@ public class Server {
      */
     private static void showStartupMessage(ServerSocket serverSocket) {
         out.clear();
-        System.out.println("=====> " + APPLICATION_NAME + " <=====");
+        CoffeeComBanner.printBanner();
+        System.out.println();  // Empty line to give more space to banner
         out.systemMessage("Successfully created server-socket.");
         out.serverMessage("PORT: " + serverSocket.getLocalPort());
         out.serverMessage("Listening for connections..");
