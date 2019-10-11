@@ -20,6 +20,7 @@ CoffeeCom requires `Java` to run. At the moment you also need to compile the sou
 
 **INSTALLATION:**
 
+The installation is quite messy at this point, will get improved.
 1.  Compile the sources
     1. Navigate to the 'main' folder (@ coffeecom/src/main/)
     2. From the command-line, compile all sources using `javac -cp resources/jansi-1.18.jar:. java/solarplus/coffeecom/[package]/*.java (do this for all packages)
