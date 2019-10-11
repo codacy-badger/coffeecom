@@ -21,11 +21,15 @@ CoffeeCom requires `Java` to run. At the moment you also need to compile the sou
 **INSTALLATION:**
 
 1.  Compile the sources
-    1. Navigate to the folder 'java' (@ coffeecom/src/main/java)
-    2. From the command-line, compile the sources using `javac solarplus/coffeecom/File.java` (or use wildcard, e.g.: javac solarplus/../*)
-2.  Run the server on the desired machine. Do this by running `java solarplus/coffeecom/Server` in the terminal.
-3.  Run the client(s) on the desired machine(s). Do this by running `java solarplus/coffeecom/Client` in the terminal.
-4.  If desired, port forwarding is a method for accessing server from anywhere. Read below if this applies to your server.
+    1. Navigate to the 'main' folder (@ coffeecom/src/main/)
+    2. From the command-line, compile all sources using `javac -cp resources/jansi-1.18.jar:. java/solarplus/coffeecom/[package]/*.java (do this for all packages)
+2.  Create a runnable jar
+    1. Navigate to the 'java' folder (@ coffeecom/src/main/java/)
+    2. From the command-line, create a jar using `jar cf [FILENAME].jar solarplus/coffeecom/serverside/*.class solarplus/coffeecom/clientside/*class solarplus/coffeecom/formatting/*.class`
+3.  Run the jar
+    1. Navigate to the 'main' folder (@ coffeecom/src/main/)
+    2. From the command-line, run the jar using `java -cp java/[FILENAME].jar:resources/jansi-1.18.jar:. solarplus.coffeecom.clientside.Client` (substitute 'clientside.Client' with 'serverside.Server' if opting for a server-jar
+4.  [OPTIONAL] If desired, port forwarding is a method for accessing server from anywhere. Read below if this applies to your server.
 
 **ACCESS FROM ANYWHERE (PORT FORWARDING):**
 
