@@ -51,7 +51,7 @@ public class Client {
             out.systemMessagePrint("PORT: ");
             int port = Integer.parseInt(input.nextLine());
 
-            // Fetching name
+            // Fetching username
             out.systemMessagePrint("USERNAME: ");
             String username = input.nextLine();
 

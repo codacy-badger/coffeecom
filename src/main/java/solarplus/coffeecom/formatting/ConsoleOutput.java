@@ -33,6 +33,15 @@ public class ConsoleOutput {
     }
 
     /**
+     * Moves cursor to the start of line and deletes entire line.
+     */
+    public void deleteLine() {
+        // TODO: change '100' to a more dynamic/robust system that can handle previous text longer than 100 symbols
+        System.out.print("\033[100D");  // Moves the cursor to the start of the line
+        System.out.print("\033[2K");  // Deletes entire current line
+    }
+
+    /**
      * Method for resetting the current `Ansi`-`String`.
      */
     private void reset() {

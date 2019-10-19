@@ -50,10 +50,12 @@ public class InputListener implements Runnable {
     public void run() {
         try {
             while (true) {
-                System.out.println("\n" + serverIn.readLine());
+                String input = serverIn.readLine();  // Input received
+
+                out.deleteLine();  // Delete prompting-line for client
+                System.out.println(input);
 
                 // Every time there is input, print new line for client to write on
-                // TODO: DIRTY FIX -> Create a better way of handling text mess when somebody writes to you while you are writing
                 out.clientMessagePrint(username, "");
             }
         } catch (IOException ioe) {
