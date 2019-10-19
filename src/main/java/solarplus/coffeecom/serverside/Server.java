@@ -204,8 +204,7 @@ public class Server {
      * @param args The arguments given when executing the program
      */
     private static int getPort(String[] args) {
-        out.clear();
-        System.out.println("=====> " + APPLICATION_NAME + ":CONFIG" + " <=====");
+        System.out.println("=====> CONFIG <=====");
 
         // Trying to get the port from `args`
         if (args.length == 1) {
