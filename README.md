@@ -31,3 +31,5 @@ USE THIS SOFTWARE AT YOUR OWN RISK.
 * [Jansi](https://github.com/fusesource/jansi) for enabling CoffeeCom to utilize colors and formatting in console.
 
 `@author` zipsap
+
+(Project transferred from my previous (and now deleted) bitbucket-repo, where my username was "solarplus". The project is now updated to exclude "solarplus" as a package name, as it is not fitting.)
