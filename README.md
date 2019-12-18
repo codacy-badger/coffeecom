@@ -2,8 +2,9 @@
 
 ### ABOUT:
 
-The purpose of this application is to provide a tool for straight forward and easy communication - locally or globally. Create your own communication-lobby and access it from wherever you may be.
-This application only works inside a terminal, no GUI (application-window) is provided.
+CoffeeCom provides a tool for straight forward and easy communication. Set up your own communication-lobby and let people connect to it through a terminal.
+Access it from your local network or on a worldwide scale via port-forwarding.
+This application only works inside a terminal, no GUI (application-window) is provided. Thus, you are able to utilize this software on CLI-systems.
 
 ### IMAGES:
 
@@ -37,6 +38,7 @@ An optional approach is to place the program in a directory of your choice and t
 *  I am not responsible for any misuse or violation you may do or act through/using this software.
 *  I am not responsible for any loss of data, damage or value to you or anyone else.
 *  This is an application solely intended for communication between individuals - use it with logic, common sense and good intentions.
+*  Currently the security on this software is very poor / non-existent, therefore do not share private information.
 
 USE THIS SOFTWARE AT YOUR OWN RISK.
 
