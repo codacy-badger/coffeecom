@@ -1,9 +1,10 @@
 package coffeecom.clientside;
 
+import coffeecom.datastream.StreamPackage;
 import coffeecom.formatting.ConsoleOutput;
 
-import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 
 /**
  * Class for constantly listening to input from server.
@@ -13,9 +14,9 @@ import java.io.IOException;
 public class InputListener implements Runnable {
 
     /**
-     * The standard input from server
+     * Standard in (from server)
      */
-    private BufferedReader serverIn;
+    private ObjectInputStream in;
 
     /**
      * The username associated with the client
@@ -25,21 +26,19 @@ public class InputListener implements Runnable {
     /**
      * Controls output to console
      */
-    private static ConsoleOutput out;
+    private static ConsoleOutput consoleFormat;
 
     /**
-     * Sets standard output and clients username.
-     *
-     * @param serverIn The standard input from the server the client is connected to
+     * @param in       The standard input (server sends data to this)
      * @param username The username associated with the client
      */
-    InputListener(BufferedReader serverIn, String username) {
+    InputListener(ObjectInputStream in, String username) {
         // Decides if color formatting should be used
         // TODO: Get `activateColors` from user input or configuration file
         boolean activateColors = true;
-        out = new ConsoleOutput(activateColors);  // Activates `ConsoleOutput` with colors on
+        consoleFormat = new ConsoleOutput(activateColors);  // Activates `ConsoleOutput` with colors on
 
-        this.serverIn = serverIn;
+        this.in = in;
         this.username = username;
     }
 
@@ -50,16 +49,20 @@ public class InputListener implements Runnable {
     public void run() {
         try {
             while (true) {
-                String input = serverIn.readLine();  // Input received
+                // Fetch data sent from server; the input from server
+                StreamPackage streamPackage = (StreamPackage) in.readObject();
+                String inputMsg = streamPackage.getMsg();
 
-                out.deleteLine();  // Delete prompting-line for client
-                System.out.println(input);
+                consoleFormat.deleteLine();  // Delete prompting-line for client
+                System.out.println(inputMsg);
 
                 // Every time there is input, print new line for client to write on
-                out.clientMessagePrint(username, "");
+                consoleFormat.clientMessagePrint(username, "");
             }
         } catch (IOException ioe) {
             ioe.printStackTrace();
+        } catch (ClassNotFoundException cnfe) {
+            cnfe.printStackTrace();
         }
     }
 }
