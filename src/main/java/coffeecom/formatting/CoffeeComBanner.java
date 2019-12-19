@@ -1,5 +1,7 @@
 package coffeecom.formatting;
 
+import coffeecom.Properties;
+
 import static org.fusesource.jansi.Ansi.Color.GREEN;
 
 /**
@@ -23,7 +25,8 @@ public class CoffeeComBanner {
     private static String[] banner = {
             "====  ====  ====  ====  ====  ====  ====  ====  =  =",
             "|     |  |  |===  |===  |===  |===  |     |  |  |\\/|",
-            "|___  |__|  |     |     |===  |===  |___  |__|  |  |"
+            "|___  |__|  |     |     |===  |===  |___  |__|  |  |",
+            Properties.VERSION
     };
 
     /**
@@ -39,8 +42,8 @@ public class CoffeeComBanner {
      * Prints a CoffeeCom-logo.
      */
     public static void printBanner() {
-        for (String line : banner) {
-            System.out.println(out.formatString(line, GREEN));
+        for (int i = 0; i < banner.length; i++) {
+            System.out.println(out.formatString(banner[i], GREEN));
         }
     }
 }

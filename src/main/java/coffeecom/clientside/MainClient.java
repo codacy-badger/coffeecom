@@ -16,11 +16,6 @@ import java.util.Scanner;
 public class MainClient {
 
     /**
-     * Name of application.
-     */
-    private static final String APPLICATION_NAME = "CoffeeCom";
-
-    /**
      * Controls output to console
      */
     private static ConsoleOutput consoleFormat;
@@ -41,7 +36,7 @@ public class MainClient {
             System.out.println();  // Empty line to give more space to banner
 
             // Fetching IP
-            consoleFormat.systemMessage("You need to connect to a " + APPLICATION_NAME + "-server.");
+            consoleFormat.systemMessage("You need to connect to a  CoffeeCom-server.");
             consoleFormat.systemMessagePrint("IP: ");
             String ip = input.nextLine();
 

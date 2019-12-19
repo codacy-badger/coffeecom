@@ -23,11 +23,6 @@ import java.util.Scanner;
 public class MainServer {
 
     /**
-     * Name of application.
-     */
-    private static final String APPLICATION_NAME = "CoffeeCom";
-
-    /**
      * Max amount of connections that can connect to the server
      */
     private static final int MAX_CLIENTS = 10;
